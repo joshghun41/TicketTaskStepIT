@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="TicketDb" Class="TicketDataClassesDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="AppSettings" ConnectionString="Data Source=MY_ASUS;Initial Catalog=TicketDb;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False" SettingsObjectName="TicketTaskWithCodeFirst.Properties.Settings" SettingsPropertyName="TicketDbConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.Airplanes" Member="Airplanes">
+    <Type Name="Airplane">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="PlaneName" Type="System.String" DbType="NVarChar(30) NOT NULL" CanBeNull="false" />
+      <Column Name="PassengerCount" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="PilotId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="Airplane_City" Member="Cities" ThisKey="Id" OtherKey="AirplaneId" Type="City" />
+      <Association Name="Airplane_Ticket" Member="Tickets" ThisKey="Id" OtherKey="AirplaneId" Type="Ticket" />
+      <Association Name="Pilot_Airplane" Member="Pilot" ThisKey="PilotId" OtherKey="Id" Type="Pilot" IsForeignKey="true" DeleteRule="CASCADE" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Cities" Member="Cities">
+    <Type Name="City">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="CityName" Type="System.String" DbType="NVarChar(30) NOT NULL" CanBeNull="false" />
+      <Column Name="ScheduleId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="AirplaneId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="City_Ticket" Member="Tickets" ThisKey="Id" OtherKey="CityId" Type="Ticket" />
+      <Association Name="Airplane_City" Member="Airplane" ThisKey="AirplaneId" OtherKey="Id" Type="Airplane" IsForeignKey="true" DeleteRule="CASCADE" />
+      <Association Name="Schedule_City" Member="Schedule" ThisKey="ScheduleId" OtherKey="Id" Type="Schedule" IsForeignKey="true" DeleteRule="CASCADE" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Pilots" Member="Pilots">
+    <Type Name="Pilot">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="FirstName" Type="System.String" DbType="NVarChar(30) NOT NULL" CanBeNull="false" />
+      <Column Name="LastName" Type="System.String" DbType="NVarChar(30) NOT NULL" CanBeNull="false" />
+      <Association Name="Pilot_Airplane" Member="Airplanes" ThisKey="Id" OtherKey="PilotId" Type="Airplane" />
+      <Association Name="Pilot_Ticket" Member="Tickets" ThisKey="Id" OtherKey="PilotId" Type="Ticket" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Schedules" Member="Schedules">
+    <Type Name="Schedule">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Date" Type="System.String" DbType="NVarChar(30) NOT NULL" CanBeNull="false" />
+      <Association Name="Schedule_City" Member="Cities" ThisKey="Id" OtherKey="ScheduleId" Type="City" />
+      <Association Name="Schedule_Ticket" Member="Tickets" ThisKey="Id" OtherKey="ScheduleId" Type="Ticket" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Tickets" Member="Tickets">
+    <Type Name="Ticket">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="PilotId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="ScheduleId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="AirplaneId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="CityId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="Airplane_Ticket" Member="Airplane" ThisKey="AirplaneId" OtherKey="Id" Type="Airplane" IsForeignKey="true" />
+      <Association Name="City_Ticket" Member="City" ThisKey="CityId" OtherKey="Id" Type="City" IsForeignKey="true" />
+      <Association Name="Pilot_Ticket" Member="Pilot" ThisKey="PilotId" OtherKey="Id" Type="Pilot" IsForeignKey="true" DeleteRule="CASCADE" />
+      <Association Name="Schedule_Ticket" Member="Schedule" ThisKey="ScheduleId" OtherKey="Id" Type="Schedule" IsForeignKey="true" />
+    </Type>
+  </Table>
+</Database>
